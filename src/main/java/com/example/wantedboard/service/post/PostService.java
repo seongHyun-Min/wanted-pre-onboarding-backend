@@ -53,16 +53,22 @@ public class PostService {
     @Transactional
     public PostResponseDto updatePost(Long userId, Long postId, UpdatePostRequestDto requestDto) {
         //dirty checking
-        Post updatePost = PostUpdatePermissionCheck(userId, postId);
+        Post updatePost = PostPermissionCheck(userId, postId);
         updatePost.update(requestDto);
 
         return PostResponseDto.from(updatePost);
     }
 
-    private Post PostUpdatePermissionCheck(Long userId, Long postId) {
+    @Transactional
+    public void deletePost(Long userId, Long postId) {
+        Post deletePost = PostPermissionCheck(userId, postId);
+        postRepository.delete(deletePost);
+    }
+
+    private Post PostPermissionCheck(Long userId, Long postId) {
         Post findPost = getPost(postId);
         if (!findPost.getUser().getId().equals(userId)) {
-            throw new NotFoundUserException("해당 게시글을 수정할 권한이 없습니다");
+            throw new NotFoundUserException("해당 게시글에 접근 권한이 없습니다");
         }
         return findPost;
     }

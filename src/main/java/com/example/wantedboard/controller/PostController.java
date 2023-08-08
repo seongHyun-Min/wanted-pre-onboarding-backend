@@ -48,4 +48,11 @@ public class PostController {
         Long userId = authentication.getUserId();
         return ResponseEntity.ok(postService.updatePost(userId, postId, requestDto));
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(UserAuthentication authentication, @PathVariable Long postId) {
+        Long userId = authentication.getUserId();
+        postService.deletePost(userId, postId);
+        return ResponseEntity.noContent().build();
+    }
 }
