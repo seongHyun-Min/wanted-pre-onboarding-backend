@@ -41,11 +41,13 @@ public class PostService {
                 .map(PostResponseDto::from)
                 .toList();
     }
+
     @Transactional(readOnly = true)
-    public PostResponseDto findPost(Long postId){
-        Post findPost = getPost(postId);
-        return PostResponseDto.from(findPost);
+    public PostResponseDto findPost(Long postId) {
+        return PostResponseDto.from(postRepository.findByIdWithUser(postId)
+                .orElseThrow(() -> new NotFoundPostException("아이디와 일치하는 게시글을 찾을 수 없습니다")));
     }
+
     private Post getPost(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundPostException("아이디와 일치하는 게시글을 찾을 수 없습니다"));
