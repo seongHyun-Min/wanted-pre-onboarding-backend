@@ -33,4 +33,9 @@ public class PostController {
     public ResponseEntity<List<PostResponseDto>> findPostsPaged(Pageable pageable) {
         return ResponseEntity.ok(postService.findPostsPaged(pageable));
     }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostResponseDto> findPost(@PathVariable Long postId) {
+        return ResponseEntity.ok(postService.findPost(postId));
+    }
 }

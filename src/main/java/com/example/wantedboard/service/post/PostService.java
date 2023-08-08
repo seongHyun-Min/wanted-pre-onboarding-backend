@@ -5,6 +5,7 @@ import com.example.wantedboard.domain.entity.User;
 import com.example.wantedboard.domain.repository.PostRepository;
 import com.example.wantedboard.dto.post.CreatePostRequestDto;
 import com.example.wantedboard.dto.post.PostResponseDto;
+import com.example.wantedboard.exception.post.NotFoundPostException;
 import com.example.wantedboard.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,5 +40,14 @@ public class PostService {
         return allPage.getContent().stream()
                 .map(PostResponseDto::from)
                 .toList();
+    }
+    @Transactional(readOnly = true)
+    public PostResponseDto findPost(Long postId){
+        Post findPost = getPost(postId);
+        return PostResponseDto.from(findPost);
+    }
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundPostException("아이디와 일치하는 게시글을 찾을 수 없습니다"));
     }
 }
