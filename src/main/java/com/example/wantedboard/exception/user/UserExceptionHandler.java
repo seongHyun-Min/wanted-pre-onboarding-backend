@@ -20,8 +20,24 @@ public class UserExceptionHandler {
     private static final HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
 
     @ExceptionHandler(DuplicateUserException.class)
-    public ResponseEntity<ErrorMessage> notFoundUserException(
+    public ResponseEntity<ErrorMessage> DuplicateUserException(
             DuplicateUserException exception
+    ) {
+        return ResponseEntity.badRequest()
+                .body(ErrorMessage.of(exception, errorStatus));
+    }
+
+    @ExceptionHandler(NotFoundUserException.class)
+    public ResponseEntity<ErrorMessage> NotFoundUserException(
+            NotFoundUserException exception
+    ) {
+        return ResponseEntity.badRequest()
+                .body(ErrorMessage.of(exception, errorStatus));
+    }
+
+    @ExceptionHandler(ForbiddenUserException.class)
+    public ResponseEntity<ErrorMessage> ForbiddenUserException(
+            ForbiddenUserException exception
     ) {
         return ResponseEntity.badRequest()
                 .body(ErrorMessage.of(exception, errorStatus));
