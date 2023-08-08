@@ -1,4 +1,4 @@
-package com.example.wantedboard.domain.entity.repository;
+package com.example.wantedboard.domain.repository;
 
 import com.example.wantedboard.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
