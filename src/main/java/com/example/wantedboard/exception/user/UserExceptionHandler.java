@@ -17,12 +17,19 @@ import java.util.stream.Collectors;
 @RestControllerAdvice(basePackageClasses = UserController.class)
 @Slf4j
 public class UserExceptionHandler {
-
     private static final HttpStatus errorStatus = HttpStatus.BAD_REQUEST;
 
     @ExceptionHandler(DuplicateUserException.class)
     public ResponseEntity<ErrorMessage> notFoundUserException(
             DuplicateUserException exception
+    ) {
+        return ResponseEntity.badRequest()
+                .body(ErrorMessage.of(exception, errorStatus));
+    }
+
+    @ExceptionHandler(UnauthorizedUserException.class)
+    public ResponseEntity<ErrorMessage> unauthorizedUserException(
+            UnauthorizedUserException exception
     ) {
         return ResponseEntity.badRequest()
                 .body(ErrorMessage.of(exception, errorStatus));
