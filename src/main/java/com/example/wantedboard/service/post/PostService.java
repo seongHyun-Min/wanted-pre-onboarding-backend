@@ -5,7 +5,9 @@ import com.example.wantedboard.domain.entity.User;
 import com.example.wantedboard.domain.repository.PostRepository;
 import com.example.wantedboard.dto.post.CreatePostRequestDto;
 import com.example.wantedboard.dto.post.PostResponseDto;
+import com.example.wantedboard.dto.post.UpdatePostRequestDto;
 import com.example.wantedboard.exception.post.NotFoundPostException;
+import com.example.wantedboard.exception.user.NotFoundUserException;
 import com.example.wantedboard.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,12 +46,29 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostResponseDto findPost(Long postId) {
-        return PostResponseDto.from(postRepository.findByIdWithUser(postId)
-                .orElseThrow(() -> new NotFoundPostException("아이디와 일치하는 게시글을 찾을 수 없습니다")));
+        Post findPost = getPost(postId);
+        return PostResponseDto.from(findPost);
+    }
+
+    @Transactional
+    public PostResponseDto updatePost(Long userId, Long postId, UpdatePostRequestDto requestDto) {
+        //dirty checking
+        Post updatePost = PostUpdatePermissionCheck(userId, postId);
+        updatePost.update(requestDto);
+
+        return PostResponseDto.from(updatePost);
+    }
+
+    private Post PostUpdatePermissionCheck(Long userId, Long postId) {
+        Post findPost = getPost(postId);
+        if (!findPost.getUser().getId().equals(userId)) {
+            throw new NotFoundUserException("해당 게시글을 수정할 권한이 없습니다");
+        }
+        return findPost;
     }
 
     private Post getPost(Long postId) {
-        return postRepository.findById(postId)
+        return postRepository.findByIdWithUser(postId)
                 .orElseThrow(() -> new NotFoundPostException("아이디와 일치하는 게시글을 찾을 수 없습니다"));
     }
 }

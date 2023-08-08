@@ -3,6 +3,7 @@ package com.example.wantedboard.controller;
 import com.example.wantedboard.config.security.UserAuthentication;
 import com.example.wantedboard.dto.post.CreatePostRequestDto;
 import com.example.wantedboard.dto.post.PostResponseDto;
+import com.example.wantedboard.dto.post.UpdatePostRequestDto;
 import com.example.wantedboard.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,5 +38,14 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponseDto> findPost(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.findPost(postId));
+    }
+
+    @PatchMapping("/{postId}")
+    public ResponseEntity<PostResponseDto> updatePost(
+            UserAuthentication authentication,
+            @PathVariable Long postId,
+            @Valid @RequestBody UpdatePostRequestDto requestDto) {
+        Long userId = authentication.getUserId();
+        return ResponseEntity.ok(postService.updatePost(userId, postId, requestDto));
     }
 }

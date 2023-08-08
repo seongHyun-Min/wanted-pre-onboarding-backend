@@ -1,5 +1,6 @@
 package com.example.wantedboard.domain.entity;
 
+import com.example.wantedboard.dto.post.UpdatePostRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,4 +26,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void update(UpdatePostRequestDto requestDto) {
+        this.title = requestDto.getTitle() != null ? requestDto.getTitle() : this.title;
+        this.content = requestDto.getContent() != null ? requestDto.getContent() : this.content;
+    }
 }
