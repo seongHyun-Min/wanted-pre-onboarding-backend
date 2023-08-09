@@ -3,6 +3,7 @@ package com.example.wantedboard.config.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,7 +28,8 @@ public class WebSecurityConfig {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/posts/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
