@@ -29,7 +29,7 @@ public class AuthService {
         return jwtUtil.createAccessToken(String.valueOf(findUser.getId())).getTokenValue();
     }
 
-    private void validationAccessToken(String accessToken) {
+    void validationAccessToken(String accessToken) {
         if (!jwtUtil.validateToken(accessToken)) {
             throw new UnauthorizedUserException("인가되지 않은 access 토큰입니다.");
         }
