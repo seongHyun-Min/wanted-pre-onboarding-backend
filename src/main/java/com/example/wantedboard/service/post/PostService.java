@@ -7,7 +7,7 @@ import com.example.wantedboard.dto.post.CreatePostRequestDto;
 import com.example.wantedboard.dto.post.PostResponseDto;
 import com.example.wantedboard.dto.post.UpdatePostRequestDto;
 import com.example.wantedboard.exception.post.NotFoundPostException;
-import com.example.wantedboard.exception.user.NotFoundUserException;
+import com.example.wantedboard.exception.user.UnauthorizedUserException;
 import com.example.wantedboard.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class PostService {
     private Post PostPermissionCheck(Long userId, Long postId) {
         Post findPost = getPost(postId);
         if (!findPost.getUser().getId().equals(userId)) {
-            throw new NotFoundUserException("해당 게시글에 접근 권한이 없습니다");
+            throw new UnauthorizedUserException("해당 게시글에 접근 권한이 없습니다");
         }
         return findPost;
     }
