@@ -6,3 +6,4 @@ spring:
   profiles:
     group:
       "dev": "dev, datasource"
+      "prod": "prod, datasource"
