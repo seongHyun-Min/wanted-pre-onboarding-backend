@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class CreateUserRequestDto {
     @NotBlank(message = "이메일은 공백을 사용할 수 없습니다.")
     @Pattern(regexp = ".*@.*", message = "이메일은 '@'를 반드시 포함해야 합니다.")
