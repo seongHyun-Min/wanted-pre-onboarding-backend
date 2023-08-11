@@ -1,11 +1,12 @@
 # 👩‍💻 지원자 : 민승현
-
+<br></br>
 
 ![image](https://github.com/seongHyun-Min/wanted-pre-onboarding-backend/assets/112048126/9dd48926-0760-41ea-85a6-989c20a997ee)
 
 
-
+<br></br>
 # 📌 애플리케이션의 실행 방법
+
 ## 1. 기술 스택
 <img alt="JAVA" src ="https://img.shields.io/badge/JAVA-C9284D.svg?&style=for-the-badge&logo=java&logoColor=white"/></a> <img alt="Spring" src ="https://img.shields.io/badge/Spring-6DB33F.svg?style=for-the-badge&logo=Spring&logoColor=white"/> <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=spring boot&logoColor=white"> <img alt=" MySQL" src ="https://img.shields.io/badge/MySQL-003545.svg?&style=for-the-badge&logo=MySQL&logoColor=white"/> <img alt="Amazon AWS" src ="https://img.shields.io/badge/Amazon AWS-FF9900.svg?&style=for-the-badge&logo=Amazon AWS&logoColor=white"/>
 
@@ -18,6 +19,7 @@
 
 - 웹 애플리케이션 개발: spring-boot-starter-web를 활용하여 웹 애플리케이션을 개발하고 웹 API를 만듭니다.
 
+- 보안 및 시큐리티: spring-boot-starter-security를 활용하여 WebSecurityConfig 및 JWT토큰을 처리 합니다.
 
 - 코드 간소화: lombok을 통해 Getter, Setter, Constructor 등의 메소드를 자동 생성하여 코드를 간소화하고 생산성을 높입니다.
 
@@ -26,7 +28,6 @@
 
 ## 3. 환경 변수 및 프로파일
 ### 환경 변수
-
 
 - ${APPLICATION_PORT}: 애플리케이션의 포트 번호를 지정합니다. 기본값은 8080입니다.
 
@@ -68,6 +69,7 @@ prod 프로파일:
 - API 요청 헤더에 JWT 토큰을 포함하여 게시글 수정 및 삭제와 같은 권한이 필요한 작업을 수행할 수 있습니다.
 - API 호출에 대한 자세한 내용은 아래 시연 영상 및 API 명세를 참고해주시기 바랍니다.
 
+<br></br>
 
 # 📌 데이터베이스 테이블 구조 (ERD)
 
@@ -86,7 +88,7 @@ prod 프로파일:
 - post_id: 게시글의 고유 식별자인 아이디 (PK)
 - post_title: 게시글 제목 (Not Null)
 - post_content: 게시글 내용 (Not Null)
-- user_id: 게시글을 작성한 사용자의 아이디 (FK, users 테이블과 연결
+- user_id: 게시글을 작성한 사용자의 아이디 (FK, users 테이블과 연결)
 
 ## 관계 매핑
 - User와 Post의 관계를 1:N(One-to-Many)로 매핑하였습니다.
@@ -105,12 +107,14 @@ prod 프로파일:
 
   
 - 쿼리 최적화: 1:N 관계를 이용하여 한 사용자가 작성한 모든 게시글을 한 번에 로드하거나, 특정 사용자의 게시글 수를 세는 등의 쿼리를 최적화할 수 있습니다.
+<br></br>
 
 
 # 📌 구현한 API의 동작을 촬영한 데모 영상 링크
 
+## https://present.do/documents/64d5fafd10ab9a5ae56822ba
 
-
+<br></br>
 
 
 # 📌 구현 방법 및 이유에 대한 간략한 설명
@@ -164,6 +168,7 @@ JWT 기반 인증
 게시글 수정과 삭제
 - 사용자는 자신의 게시글을 수정하거나 삭제할 수 있습니다.
 - 이때 게시글의 권한을 확인하여 해당 사용자만 수정 또는 삭제할 수 있도록 제한하고 있습니다.
+<br></br>
 
 # 📌 API 명세
 
@@ -318,6 +323,53 @@ JWT 기반 인증
 - Status: 204 No Content
 
 <img width="853" alt="image" src="https://github.com/seongHyun-Min/wanted-pre-onboarding-backend/assets/112048126/659d610e-292c-4b5d-bb40-a1356fcdc572">
+
+<br></br>
+
+# 📌 Docker-compose
+
+## 1.gradle build 
+- DockerFile을 통해 Gradle을 사용하여 프로젝트를 빌드하여 JAR 파일을 생성합니다.
+
+## 2.docker-compose up
+### database 서비스
+
+- MySQL 8.0 이미지를 사용하여 데이터베이스 컨테이너를 생성합니다.
+- test_board_db라는 이름의 컨테이너가 생성됩니다.
+- MYSQL_DATABASE 환경 변수를 설정하여 데이터베이스 이름을 지정합니다.
+- MYSQL_ROOT_HOST 환경 변수를 설정하여 (root) 사용자가 어떤 호스트로부터의 연결도 허용하도록 설정합니다.
+- MYSQL_ROOT_PASSWORD 환경 변수를 설정하여 (root) 사용자의 암호를 설정합니다.
+- 호스트의 3306 포트와 컨테이너의 3306 포트를 매핑하여 외부에서 MySQL에 접근할 수 있도록 합니다.
+- ./db/data 디렉터리를 컨테이너 내의 /var/lib/mysql 디렉터리에 마운트하여 데이터를 유지합니다.
+- pre_onboarding 네트워크에 연결합니다.
+  
+### webapp 서비스:
+- build 섹션에서 현재 디렉터리의 Dockerfile을 사용하여 이미지를 빌드합니다.
+- 항상 컨테이너를 재시작합니다.
+- database 서비스가 실행 중일 때만 실행됩니다 (depends_on).
+- 호스트의 80 포트와 컨테이너의 8080 포트를 매핑하여 외부에서 어플리케이션에 접근할 수 있도록 합니다.
+- 컨테이너 이름을 board_app으로 지정합니다.
+- 다양한 환경 변수를 설정하여 Spring Boot 어플리케이션의 설정을 구성합니다.
+  - ${APPLICATION_PORT}: 애플리케이션의 포트 번호를 지정합니다.
+  - ${DATABASE_HOST}: 데이터베이스 호스트 주소를 지정합니다.
+  - ${DATABASE_PORT}: 데이터베이스 포트 번호를 지정합니다. 
+  - ${DATABASE_NAME}: 데이터베이스 이름을 지정합니다.
+  - ${DATABASE_USERNAME}: 데이터베이스 사용자 이름을 지정합니다.
+  - ${DATABASE_PASSWORD}: 데이터베이스 사용자 비밀번호를 지정합니다.
+  - ${JWT_SECRET_KEY}: JWT 토큰 서명에 사용되는 비밀 키를 지정합니다
+  - ${JWT_ACCESS_EXPIRE}: JWT 액세스 토큰의 만료 시간을 지정합니다.
+- pre_onboarding 네트워크에 연결합니다.
+
+- networks 섹션에서 pre_onboarding이라는 이름의 사용자 정의 네트워크를 정의하여 두 서비스가 해당 네트워크에 속하도록 합니다.
+
+<img width="965" alt="image" src="https://github.com/seongHyun-Min/wanted-pre-onboarding-backend/assets/112048126/62b5de19-fd95-42ab-9569-561dd9a69e7f">
+
+<br></br>
+# 📌 클라우드 환경(AWS)
+
+## 배포된 API 주소 : 43.202.90.139
+![image](https://github.com/seongHyun-Min/wanted-pre-onboarding-backend/assets/112048126/c7e15bc8-7e67-4947-8410-8047a737bcee)
+
 
 
 
